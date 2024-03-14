@@ -1,6 +1,7 @@
 def replace_with_xformers_attention():
     import torch
     import xformers.ops as xops
+    from transformers import LlamaForCausalLM
 
     from typing import Optional, Tuple
     from transformers.models.llama.modeling_llama import LlamaAttention, apply_rotary_pos_emb
@@ -13,9 +14,10 @@ def replace_with_xformers_attention():
         past_key_value: Optional[Tuple[torch.Tensor]] = None,
         output_attentions: bool = False,
         use_cache: bool = False,
+        cache_position: Optional[torch.LongTensor] = None
     ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
         bsz, q_len, _ = hidden_states.size()
-
+        
         query_states = self.q_proj(hidden_states)
         key_states = self.k_proj(hidden_states)
         value_states = self.v_proj(hidden_states)
