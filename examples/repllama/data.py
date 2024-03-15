@@ -21,9 +21,11 @@ class HFTrainDataset:
         data_files = data_args.train_path
         if data_files:
             data_files = {data_args.dataset_split: data_files}
+        #import pdb; pdb.set_trace()
         self.dataset = load_dataset(data_args.dataset_name,
                                     data_args.dataset_language,
-                                    data_files=data_files, cache_dir=cache_dir, use_auth_token=True)[data_args.dataset_split]
+                                    data_files=data_files, 
+                                    cache_dir=cache_dir)[data_args.dataset_split].select(range(10000)) #use_auth_token=True
         self.preprocessor = TrainPreProcessor
         self.tokenizer = tokenizer
         self.q_max_len = data_args.q_max_len
