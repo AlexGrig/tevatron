@@ -6,8 +6,8 @@ train.py \
   --bf16 \
   --per_device_train_batch_size 32 \ # ?
   --per_device_eval_batch_size 32
-  #--gradient_accumulation_steps 4 \ # ?
-  #--gradient_checkpointing \ # ?
+  --gradient_accumulation_steps 4 \ # ?
+  --gradient_checkpointing \ # ?
   --train_n_passages 16 \ #?
   --learning_rate 1e-4 \
   --q_max_len 32 \

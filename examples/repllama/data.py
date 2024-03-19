@@ -191,9 +191,14 @@ class TrainDataset(Dataset):
         return self.total_len
 
     def __getitem__(self, item) -> Tuple[BatchEncoding, List[BatchEncoding]]:
+        #import pdb; pdb.set_trace()
+        #print(self.trainer.state)
         group = self.train_data[item]
-        epoch = int(self.trainer.state.epoch)
-
+        if self.trainer.state.epoch is None:
+            epoch = 0
+        else:
+            epoch = int(self.trainer.state.epoch)
+            
         _hashed_seed = hash(item + self.trainer.args.seed)
 
         qry = group['query']

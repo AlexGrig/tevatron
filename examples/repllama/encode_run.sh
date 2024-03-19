@@ -1,4 +1,4 @@
-HF_TOKEN=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 CUDA_VISIBLE_DEVICES=0 python encode.py \
+HF_TOKEN= CUDA_VISIBLE_DEVICES=0 python encode.py \
   --output_dir=temp \
   --model_name_or_path castorini/repllama-v1-7b-lora-passage \
   --tokenizer_name meta-llama/Llama-2-7b-hf \

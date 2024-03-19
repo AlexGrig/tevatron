@@ -50,8 +50,8 @@ class RepLLaMA(EncoderModel):
     def compute_similarity(self, q_reps, p_reps):
         return torch.matmul(q_reps, p_reps.transpose(0, 1)) / 0.01
     
-    def gradient_checkpointing_enable(self):
-        self.lm_q.base_model.gradient_checkpointing_enable()
+    def gradient_checkpointing_enable(self, gradient_checkpointing_kwargs=None):
+        self.lm_q.base_model.gradient_checkpointing_enable(gradient_checkpointing_kwargs=gradient_checkpointing_kwargs)
 
     
     @staticmethod
@@ -70,7 +70,23 @@ class RepLLaMA(EncoderModel):
             model_args,
             train_args,
             **hf_kwargs,
-    ):
+    ):  
+        attn_implementation="flash_attention_2"
+        attn_implementation = hf_kwargs.get('attn_implementation', '')
+        if attn_implementation == "flash_attention_2":
+            if (train_args.bf16 == False) and (train_args.fp16 == False):     
+                raise ValueError("Flash Attention 2 can't be used without bf16 or fp16 = true in training params.")
+            else:
+                if train_args.bf16:
+                    torch_dtype=torch.bfloat16
+                elif train_args.fp16:
+                    torch_dtype=torch.float16
+                else:
+                    raise ValueError("Should not be here")
+        else:
+            torch_dtype = "auto"
+        hf_kwargs['torch_dtype'] = torch_dtype
+        
         base_model = LlamaModel.from_pretrained(model_args.model_name_or_path, **hf_kwargs)
         if train_args.gradient_checkpointing:
             base_model.enable_input_require_grads()
