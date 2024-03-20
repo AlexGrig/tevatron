@@ -49,7 +49,7 @@ def main():
 
     tokenizer = AutoTokenizer.from_pretrained(
         model_args.tokenizer_name if model_args.tokenizer_name else model_args.model_name_or_path,
-        cache_dir=model_args.cache_dir, token='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'
+        cache_dir=model_args.cache_dir, token=''
     )
     tokenizer.pad_token_id = tokenizer.unk_token_id
     tokenizer.pad_token = tokenizer.unk_token
